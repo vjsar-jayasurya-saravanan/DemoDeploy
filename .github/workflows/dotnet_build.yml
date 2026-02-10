@@ -11,7 +11,6 @@ on:
         - main
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -23,8 +22,17 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore dependencies
+      - name: Restore
         run: dotnet restore
 
       - name: Build
-        run: dotnet build
+        run: dotnet build -c Release --no-restore
+
+      - name: Publish
+        run: dotnet publish -c Release -o publish
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webapi-build
+          path: publish
